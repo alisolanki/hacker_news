@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:hackernews/models/news_model.dart';
+import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NewsWidget extends StatelessWidget {
-  final int _index;
-  NewsWidget(this._index);
+  final NewsModel _newsModel;
+  NewsWidget(this._newsModel);
+
+  void _launchURL({@required String url}) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,17 +23,16 @@ class NewsWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "by Ali Solanki",
+            "by ${_newsModel.by}",
             style: TextStyle(
               color: Colors.white70,
             ),
           ),
           ListTile(
             contentPadding: EdgeInsets.only(top: 16.0),
-            title: Text(
-                "This is the long ass Title that probably no one will read but I will write it anyway because who knows what might just happen"),
-            subtitle: Text(
-                "This is the long ass Title that probably no one will read but I will write it anyway because who knows what might just happenThis is the long ass Title that probably no one will read but I will write it anyway because who knows what might just happen"),
+            title: Text("${_newsModel.title}"),
+            subtitle: Text("${_newsModel.text}"),
+            onTap: () => _launchURL(url: _newsModel.url),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -31,9 +41,10 @@ class NewsWidget extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.star,
+                    color: Colors.orange,
                   ),
                   Text(
-                    " 114",
+                    " ${_newsModel.score}",
                     style: TextStyle(
                       color: Colors.white70,
                       fontSize: 16.0,
@@ -41,7 +52,15 @@ class NewsWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              IconButton(icon: Icon(Icons.share), onPressed: () {})
+              IconButton(
+                icon: Icon(
+                  Icons.share,
+                  color: Colors.orange,
+                ),
+                onPressed: () => Share.share(
+                  "Look at what I found on Hacker News App: ${_newsModel.url}",
+                ),
+              )
             ],
           ),
           Divider()
