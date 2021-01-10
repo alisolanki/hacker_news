@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import '../home_page.dart';
+import 'package:hackernews/HomePage/home_page.dart';
+import 'package:hackernews/News/news_page.dart';
 
 class DrawerItems extends StatefulWidget {
   @override
@@ -43,12 +43,20 @@ class _DrawerItemsState extends State<DrawerItems> {
               ),
               onTap: () {
                 Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return HomePage();
+                    },
+                  ),
+                );
               },
             ),
             ListTile(
               leading: Icon(Icons.list, color: Colors.orange),
               title: Text(
-                'Categories',
+                'News',
               ),
               onTap: () {
                 Navigator.pop(context);
@@ -56,7 +64,7 @@ class _DrawerItemsState extends State<DrawerItems> {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return HomePage();
+                      return NewsPage();
                     },
                   ),
                 );

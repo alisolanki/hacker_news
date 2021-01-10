@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hackernews/models/news_model.dart';
+import 'package:hackernews/provider/news_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -32,7 +34,11 @@ class NewsWidget extends StatelessWidget {
             contentPadding: EdgeInsets.only(top: 16.0),
             title: Text("${_newsModel.title}"),
             subtitle: Text("${_newsModel.text}"),
-            onTap: () => _launchURL(url: _newsModel.url),
+            onTap: () {
+              _launchURL(url: _newsModel.url);
+              Provider.of<NewsProvider>(context, listen: false)
+                  .incrementCount(_newsModel);
+            },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
